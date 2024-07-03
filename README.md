@@ -4,6 +4,9 @@
 
 - sudo apt update
 - sudo apt install python3-psycopg2
+- pip3 install pytube
+- sudo pip3 install pytube --break-system-packages
+  By using the --break-system-packages option, you are explicitly allowing pip3 to install packages globally despite the managed environment warning.
 
 - sudo service postgresql start
 

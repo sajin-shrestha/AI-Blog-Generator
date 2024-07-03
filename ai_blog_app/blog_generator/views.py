@@ -1,15 +1,46 @@
+import json
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from pytube import Youtube
 
 # Create your views here.
-@login_required #only users that are logged in can access index page
+@login_required # only users that are logged in can access index page
 def index(request):
     return render(request, 'index.html')
 
+@csrf_exempt # wont need token for this request
 def generate_blog(request):
-    pass
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)  
+            yt_link = data['link']
+            return JsonResponse({'content': yt_link})
+        except(KeyError, json.JSONDecodeError):
+            return JsonResponse({'error': 'Invalid data send'}, status = 400)
+        
+        # get yt title 
+        title = yt_title(yt_link)
+
+        # get transcript
+
+        # use open ai to generate blog 
+
+        # save blog article to dataase 
+
+        # return blog article as a response
+
+            
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status = 405)
+
+def yt_title(link):
+    yt = Youtube(link)
+    title = yt.title
+    return title
 
 def user_login(request):
     if request.method == "POST":
